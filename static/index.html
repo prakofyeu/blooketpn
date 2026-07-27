@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квизы</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+
+<div class="container">
+    <h1>Все квизы</h1>
+
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <button class="btn btn-auto" onclick="OpenModal()">Создать квиз</button>
+    </div>
+
+    <div id="quiz-list" class="quiz-qrid">
+        <p class="empty">Загрузка...</p>
+    </div>
+</div>
+
+<div id="modal-overlay" class="modal-overlay hidden"> 
+    <div class="modal">
+    <div class="modal-header">
+        <h2>Новый квиз</h2>
+        <button type="button" class="btn-close" onclick="CloseModal()">Отмена</button>
+    </div>
+
+    <form id="quiz-form" class="modal-form" onsubmit="submitQuiz(event)">
+        <div class="form-group">
+            <label for="f-title">Название</label>
+            <input type="text" id="f-title" class="form-input" maxlength="100">
+        </div>
+        <div class="form-group">
+            <label for="f-desc">Описание</label>
+            <input type="text" id="f-desc" class="form-input" maxlength="500">
+        </div>
+        <div class="form-group">
+            <label for="f-author">Автор</label>
+            <input type="text" id="f-author" class="form-input" maxlength="100">
+        </div>
+
+        <div id="questions-container"></div>
+
+        <button type="button" class="btn-add-question" onclick="AddQuestion()">Добавить вопрос</button>
+
+        <div id="form-error" class="form-error hidden"></div>
+
+
+        <button type="submit" id="submit-btn" class="btn">Создать квиз</button>
+    </form>
+    </div>
+</div>
+
+
+<script>
+
+function OpenModal() {
+    document.getElementById("quiz-form").reset();
+    document.getElementById("questions-container").innerHTML = "";
+    document.getElementById("modal-overlay").classList.remove("hidden");
+}
+
+function CloseModal() {
+    document.getElementById("modal-overlay").classList.add("hidden");
+}
+
+function submitQuiz() {
+    CloseModal();
+}
+
+let qCounter=0;
+function AddQuestion() {
+const qId = qCounter++;
+}
+
+
+
+</script>
+
+</body>
+
+
+</html>
