@@ -76,7 +76,78 @@ function submitQuiz() {
 let qCounter=0;
 function AddQuestion() {
 const qId = qCounter++;
+const container = document.getElementById("questions-container");
+const card = document.createElement("div");
+card.className = "question-card";
+card.dataset.qid = qId;
+const num = document.querySelectorAll(".question-card").length + 1;
+
+card.innerHTML = `
+
+<div class="question-card-header">
+    <span class="question-label">Вопрос ${num}</span>
+    <button type="button" class="btn-ghost btn-danger"
+     onclick="removeQuestion(this)">УДалить</button>
+</div>
+<input type="text" class="form-input q-text" placeholder="текст вопроса" maxlength=500>
+<div class="answers-list">
+    ${makeAnswerHTML(qId, true)}
+    ${makeAnswerHTML(qId, false)}
+</div>
+<button type="button" class="btn-add-answer"
+ onclick="addAnswer(${qId})">Добавить ответ</button>
+`;
+container.appendChild(card);
 }
+
+    function makeAnswerHTML(qId, checked) {
+        return `
+                <div class="answer-row">
+                    <input type="radio" class="a-radio" name="correct-${qId}"
+                           ${checked ? 'checked' : ''}>
+                    <input type="text" class="form-input a-text"
+                           placeholder="Вариант ответа" maxlength="200">
+                    <button type="button" class="btn-ghost btn-danger"
+                            onclick="removeAnswer(this)">✕</button>
+                </div>
+            `;
+    }
+
+    function removeQuestion(btn) {
+        btn.closest('.question-card').remove();
+        document.querySelectorAll('.question-card').forEach((card, i) => {
+            card.querySelector('.question-label').textContent = `Вопрос ${i + 1}`;
+        });
+    }
+
+    function addAnswer(qId) {
+        const card = document.querySelector(`.question-card[data-qid="${qId}"]`);
+        const list = card.querySelector('.answers-list');
+        const addBtn = card.querySelector('.btn-add-answer');
+
+        if (list.querySelectorAll('.answer-row').length >= 4) return; // лимит схемы
+
+        list.insertAdjacentHTML('beforeend', makeAnswerHTML(qId, false));
+
+        if (list.querySelectorAll('.answer-row').length >= 4) {
+            addBtn.classList.add('hidden');
+        }
+    }
+
+    function removeAnswer(btn) {
+        const row = btn.closest('.answer-row');
+        const list = row.closest('.answers-list');
+        const card = list.closest('.question-card');
+
+        if (list.querySelectorAll('.answer-row').length <= 2) return; // минимум 2
+
+        const wasChecked = row.querySelector('.a-radio').checked;
+        row.remove();
+
+        if (wasChecked) list.querySelector('.a-radio').checked = true;
+
+        card.querySelector('.btn-add-answer').classList.remove('hidden');
+    }
 
 
 
